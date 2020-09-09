@@ -1,7 +1,7 @@
 export default {
     Query: {
-        genres: async (_, params, {dataSources}) => {
-           return await dataSources.TMDBDataSource.getGenres();
+        tvGenres: async (_, params, {dataSources}) => {
+           return await dataSources.GenresDataSource.getTvGenres();
         },
     },
 }

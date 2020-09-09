@@ -2,8 +2,7 @@ import { gql } from 'apollo-server-express';
 
 export default  gql `
     extend type Query {
-        genres: [Genre!]
-        genre(id: ID!): Genre!
+        tvGenres: [Genre!]
     }
     
     type Genre{

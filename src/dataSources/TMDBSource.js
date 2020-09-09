@@ -1,24 +1,15 @@
+import { RESTDataSource }  from 'apollo-datasource-rest';
 
+const apiUrl = process.env.TMDB_HOST_URL;
 
-const apiUrl = process.env.PORT;
-
-class TMDBDataSource extends RESTDataSource {
+export class TMDBDataSource extends RESTDataSource {
     constructor() {
       super();
       this.baseURL = apiUrl;
     }
 
     willSendRequest(request) {
-        request.params.set('api_key', );
-        request.params.set('language', this.context.appKey);
-      }
-
-    getTvShow=async (id)=>{
-        const tvShow = await this.get(`tv/${id}`);
-        return tvshow;
-    }
-    getTvGenres=async ()=>{
-        const tvShow = await this.get(`genre/tv/list`);
-        return tvshow;
+        request.params.set('api_key', this.context.appKey);
+        request.params.set('language', "en-US");
     }
 }

@@ -2,16 +2,16 @@ import {gql} from 'apollo-server-express';
 
 export default  gql `
     extend type Query {
-        searchTvShows(query : String!): TvShowsPaginated!
-        tvShow(id: ID!): TvShow!
+        searchMovies(query : String!): MoviesPaginated!
+        movie(id: ID!): Movie!
     }
-    type TvShowsPaginated{
+    type MoviesPaginated{
         page: Int!,
         total_results: Int!,
         total_pages: Int!,
         results : [TvShow!]
     }
-    type TvShow{
+    type Movie{
         id : ID!
         name : String!
     }`;
