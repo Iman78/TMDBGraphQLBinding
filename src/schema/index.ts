@@ -1,7 +1,7 @@
 import { gql } from 'apollo-server-express';
-import genreSchema from './genreSchema.js';
-import tvShowSchema from './tvShowSchema.js';
-import movieSchema from './movieSchema.js';
+import genreSchema from './genreSchema';
+import tvShowSchema from './tvShowSchema';
+import movieSchema from './movieSchema';
 
 const linkSchema = gql`
     type Query {

@@ -1,6 +1,7 @@
 import { RESTDataSource }  from 'apollo-datasource-rest';
 
 const apiUrl = process.env.TMDB_HOST_URL;
+const appKey = process.env.TMDB_APP_KEY;
 
 export class TMDBDataSource extends RESTDataSource {
     constructor() {
@@ -9,7 +10,8 @@ export class TMDBDataSource extends RESTDataSource {
     }
 
     willSendRequest(request) {
-        request.params.set('api_key', this.context.appKey);
+        request.params.set('api_key', appKey);
         request.params.set('language', "en-US");
+        request.params.set('include_adult', "false");
     }
 }
