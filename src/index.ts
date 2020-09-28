@@ -1,2 +1,2 @@
 import './core/server/apolloServer';
-import './core/cache';
+import './core/cache/index';

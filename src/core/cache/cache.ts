@@ -26,7 +26,7 @@ class Cache<T extends {id : K}, K> {
         
     }
 
-    getFromCache=async(keys : K | K[]) : Promise<T>=>{
+    getFromCache=async(keys : K | K[]) : Promise<T[]>=>{
         var value;
         if(Array.isArray(keys)){
             value= keys.map(async e=>(await this.getSingleElement(e)));
@@ -37,7 +37,7 @@ class Cache<T extends {id : K}, K> {
         return Promise.resolve(value);
     }
     
-    get=async(keys : K | K[]) : Promise<T> =>{
+    get=async(keys : K | K[]) : Promise<T[]> =>{
         this.refreshed=false;
         return Promise.resolve(this.getFromCache(keys));
     }

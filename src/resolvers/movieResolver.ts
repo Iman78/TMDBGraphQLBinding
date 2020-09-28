@@ -1,4 +1,6 @@
+import { PaginatedEntity } from 'types/PaginatedEntity';
 import {movieGenresCache} from '../core/cache/movieGenresCache';
+import { Movie } from './../types/movie';
 
 export default {
     Movie : {
@@ -9,11 +11,11 @@ export default {
         }
     },
     Query: {
-        searchMovies: async (_, {query, page}, {dataSources}) => {
+        searchMovies: async (_, {query, page}, {dataSources}) : Promise<Movie>=> {
            return await dataSources.MoviesDataSource.searchMovies(query, page);
         },
-        movie: async (_, { id }, {dataSources}) => {
+        movie: async (_, { id }, {dataSources}) : Promise<PaginatedEntity<Movie>> => {
             return await dataSources.MoviesDataSource.getMovie(id);
-         }
+        }
     }
 }
