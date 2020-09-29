@@ -9,7 +9,7 @@ export default {
             const {genre_ids}=obj;
             if(obj.genres) return obj.genres;
             if(!genre_ids || genre_ids.length==0) return [];
-            return await tvGenresCache.get(genre_ids);
+            return await movieGenresCache.get(genre_ids);
         }
     },
     Query: {
