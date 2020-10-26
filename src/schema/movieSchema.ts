@@ -5,6 +5,10 @@ export default  gql `
         searchMovies(query: String! page: Int): MoviesPaginated!
         movie(id: ID!): Movie!
     }
+    extend type Mutation {
+        addMoviesSimilarity(similarity: SimilarityInput!): SimilarityRecord!
+        deleteMovieSimilarityRecord(similarityId: ID !) : SimilarityRecord
+    }
     type MoviesPaginated{
         page: Int!
         total_results: Int!
@@ -32,4 +36,5 @@ export default  gql `
         runtime: Int
         status: String
         tagline: String
+        similarMovies: [Similarity]
     }`;

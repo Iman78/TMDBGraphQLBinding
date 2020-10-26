@@ -1,5 +1,5 @@
-import { Movie } from 'types/movie';
-import { PaginatedEntity } from 'types/PaginatedEntity';
+import { Movie } from 'models/types/movie';
+import { PaginatedEntity } from 'models/types/PaginatedEntity';
 import {TMDBDataSource} from './TMDBSource';
 
 export class MoviesDataSource extends TMDBDataSource {

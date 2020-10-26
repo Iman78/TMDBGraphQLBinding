@@ -5,6 +5,10 @@ export default  gql `
         searchTvShows(query: String!, page: Int): TvShowsPaginated!
         tvShow(id: ID!): TvShow!
     }
+    extend type Mutation {
+        addTvshowsSimilarity(similarity: SimilarityInput!): SimilarityRecord!
+        deleteTvShowSimilarityRecord(similarityId: ID !) : SimilarityRecord
+    }
     type TvShowsPaginated{
         page: Int!
         total_results: Int!
@@ -69,6 +73,8 @@ export default  gql `
         backdrop_path: String
         
         seasons: [Season]
-        networks: [Network!]    
+        networks: [Network!]   
+
+        similarShows: [Similarity]
     }
 `;

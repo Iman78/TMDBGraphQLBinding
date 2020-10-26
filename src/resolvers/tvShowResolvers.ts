@@ -1,9 +1,12 @@
 import { parseResolveInfo, ResolveTree } from 'graphql-parse-resolve-info';
-import { PaginatedEntity } from 'types/PaginatedEntity';
-import { Season } from './../types/season';
-import { Genre } from './../types/genre';
-import { tvGenresCache } from './../core/cache/tvShowGenresCache';
-import { TvShow } from './../types/tvShow';
+import { PaginatedEntity } from '../models/types/PaginatedEntity';
+import { Season } from '../models/types/season';
+import { Genre } from '../models/types/genre';
+import { tvGenresCache } from '../core/cache/tvShowGenresCache';
+import { TvShow } from '../models/types/tvShow';
+import { resolveDataHelper } from '../helpers/resolveDataHelper';
+import { ItemTypeEnum } from '../models/types/itemTypeEnum';
+import { ItemSimilarityDto, SimilarityDbDto } from '../models/types/similarity';
 
 export default {
     TvShow : { 
@@ -15,14 +18,18 @@ export default {
         },
         seasons : async (obj, _, {dataSources} , info) : Promise<Season[]> => {
             const parsedResolveInfo  = parseResolveInfo(info);
-
             if( parsedResolveInfo &&
                 parsedResolveInfo.fieldsByTypeName.Season['episodes']){
                 return await Promise.all(obj.seasons.map(async season => 
                     (await dataSources.TvShowsDataSource.getSeason(obj.id, season.season_number))));
-                }
+            }
             return obj.seasons;
-        }
+        },
+        similarShows : async (obj, _, context) : Promise<ItemSimilarityDto[]> => {
+            context.itemType= ItemTypeEnum.tvShow;
+            return await context.dataSources.TvshowsSimilarityDataSource.getItemSimilarities(obj.id);
+        },
+
     },
     Season : {
         episode_count : (obj) : number=>{
@@ -36,17 +43,27 @@ export default {
         },
         searchTvShows : async (_, { query, page}, {dataSources}, info) : Promise<PaginatedEntity<TvShow>> => {
             const tvShows : PaginatedEntity<TvShow>= await dataSources.TvShowsDataSource.searchTvShows(query, page);
-            const extraFieldNames = ['episode_run_time', 'number_of_episodes', 'number_of_seasons', 'status', 'type', 'homepage', 'in_production', 'languages', 'last_air_date', 'last_episode_to_air', 'next_episode_to_air', 'seasons', 'networks'];
             const parsedResolveInfo  = parseResolveInfo(info);
             if( parsedResolveInfo && 
-                parsedResolveInfo.fieldsByTypeName?.TvShowsPaginated['results'] && 
-                extraFieldNames.some(entry => (Object.keys(parsedResolveInfo.fieldsByTypeName?.TvShowsPaginated['results'].fieldsByTypeName?.TvShow).includes(entry))))
+                parsedResolveInfo.fieldsByTypeName?.TvShowsPaginated['results'])
             {
-                const detailedTvShows= await Promise.all( tvShows.results.map(async tvShow => 
-                    (await dataSources.TvShowsDataSource.getTvShow(tvShow.id))));
-                tvShows.results = detailedTvShows;
+                const results = await resolveDataHelper<number, TvShow, TvShow>(
+                    parsedResolveInfo.fieldsByTypeName?.TvShowsPaginated['results'].fieldsByTypeName,
+                    ItemTypeEnum.tvShow,
+                    tvShows.results,
+                    dataSources.TvShowsDataSource.getTvShow
+                );
+                tvShows.results = results ?? tvShows.results;
             }
             return tvShows;
          }
     },
+    Mutation : {
+        addTvshowsSimilarity :  async (_, { similarity }, {dataSources}) : Promise<SimilarityDbDto> => {
+            return await dataSources.TvshowsSimilarityDataSource.createSimilarity(similarity);
+        },
+        deleteTvShowSimilarityRecord :  async (_, { similarityId }, {dataSources}) : Promise<SimilarityDbDto> => {
+                return await dataSources.TvshowsSimilarityDataSource.deleteSimilarityById(similarityId);
+        },
+    }
 }

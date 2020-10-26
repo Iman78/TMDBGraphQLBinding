@@ -1,8 +1,8 @@
 import {TMDBDataSource} from './TMDBSource';
-import { TvShow } from './../types/tvShow';
-import { PaginatedEntity } from 'types/PaginatedEntity';
-import { Episode } from './../types/episode';
-import { Season } from 'types/season';
+import { TvShow } from '../models/types/tvShow';
+import { PaginatedEntity } from 'models/types/PaginatedEntity';
+import { Episode } from '../models/types/episode';
+import { Season } from 'models/types/season';
 
 export class TvShowsDataSource extends TMDBDataSource {
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Genre } from '../types/genre';
+import { Genre } from '../models/types/genre';
 
 const apiUrl = process.env.TMDB_HOST_URL;
 const appKey = process.env.TMDB_APP_KEY;
